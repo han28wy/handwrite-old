@@ -1,0 +1,64 @@
+<html>
+  <head>
+    333
+  </head>
+  <body>
+    <br />
+    <button id="debounce">点我防抖！</button>
+    <button id="throttle">点我节流！</button>
+  </body>
+  <script>
+    ///////////////////////////////////////
+    window.onload = function () {
+      var myDebounce = document.getElementById("debounce");
+      myDebounce.addEventListener("click", debounceTest(sayDebounce));
+    };
+    function debounce(fn) {
+      let timeout = null;
+      return function () {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          fn.call(this, arguments);
+        }, 1000);
+      };
+    }
+    function sayDebounce() {
+      console.log("防抖成功！");
+    }
+    ///////////////////////////////////////
+    var debounceFlag = false;
+    function debounceTest(fn) {
+      if (debounceFlag) {
+        console.log('现在flag = true')
+        debounceFlag = false
+      } else {
+        setTimeout(()=>{
+          fn();
+          debounceFlag = true
+        }, 2000)
+      }
+    }
+
+    /////////////////////////
+    window.onload = function () {
+      var myDebounce = document.getElementById("throttle");
+      myDebounce.addEventListener("click", throttle(test2));
+    };
+    // 节流
+    function throttle(fn) {
+      let flag = null; // 通过闭包保存一个标记
+      return function () {
+        if (flag) return; // 当定时器没有执行的时候标记永远是false，在开头被return掉
+        flag = setTimeout(() => {
+          fn.apply(this, arguments);
+          // 最后在setTimeout执行完毕后再把标记设置为true(关键)
+          // 表示可以执行下一次循环了。
+          flag = null;
+        }, 2000);
+      };
+    }
+    function test2(){
+      console.log('tttest ')
+    }
+  </script>
+</html>
