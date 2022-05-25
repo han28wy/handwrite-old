@@ -4,16 +4,17 @@
   </head>
   <body>
     <br />
-    <button id="debounce">点我防抖！</button>
+    <button id="debounce1">点我防抖！</button>
     <button id="throttle">点我节流！</button>
   </body>
   <script>
     ///////////////////////////////////////
     window.onload = function () {
-      var myDebounce = document.getElementById("debounce");
-      myDebounce.addEventListener("click", debounceTest(sayDebounce));
+      var myDebounce = document.getElementById("debounce1");
+      myDebounce.addEventListener("click", debounce(sayDebounce));
     };
     function debounce(fn) {
+      console.log("我在执行debounce");
       let timeout = null;
       return function () {
         clearTimeout(timeout);
@@ -24,41 +25,34 @@
     }
     function sayDebounce() {
       console.log("防抖成功！");
-    }
-    ///////////////////////////////////////
-    var debounceFlag = false;
-    function debounceTest(fn) {
-      if (debounceFlag) {
-        console.log('现在flag = true')
-        debounceFlag = false
-      } else {
-        setTimeout(()=>{
-          fn();
-          debounceFlag = true
-        }, 2000)
-      }
+      document.addEventListener("click", function (e) {
+        console.log(e.clientX);
+      });
     }
 
     /////////////////////////
     window.onload = function () {
-      var myDebounce = document.getElementById("throttle");
-      myDebounce.addEventListener("click", throttle(test2));
+      var mythrottle = document.getElementById("throttle");
+      mythrottle.addEventListener("click", throttle(test2));
     };
     // 节流
     function throttle(fn) {
-      let flag = null; // 通过闭包保存一个标记
-      return function () {
-        if (flag) return; // 当定时器没有执行的时候标记永远是false，在开头被return掉
-        flag = setTimeout(() => {
+      console.log('我在click')
+      let flag = true
+      return function() {
+        if (flag) {
+        setTimeout(() => {
           fn.apply(this, arguments);
           // 最后在setTimeout执行完毕后再把标记设置为true(关键)
           // 表示可以执行下一次循环了。
-          flag = null;
+          flag = true;
         }, 2000);
-      };
+      }
+      flag = false
+      }
     }
-    function test2(){
-      console.log('tttest ')
+    function test2() {
+      console.log("tttest ");
     }
   </script>
 </html>
