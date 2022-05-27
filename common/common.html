@@ -45,7 +45,7 @@
     // console.log(new1("ssss"));
     // 防抖 最后一次触发算起，间隔单位事件再执行
     function debounce(fn, wait) {
-      var timer = null
+      var timer = null;
       return function () {
         clearTomeout(timer);
         timer = setTimeout(() => {
@@ -55,22 +55,63 @@
     }
 
     // 节流 单位事件内只触发一次
-    var flag = false
+    var flag = false;
     function throttle(fn, wait) {
-     if(!flag){
-       console.log('现在不能执行')
-       return
-     }
-     flag = false
-      setTimeout(()=>{
-       fn();
-       flag = true
-     }, wait)
+      if (!flag) {
+        console.log("现在不能执行");
+        return;
+      }
+      flag = false;
+      setTimeout(() => {
+        fn();
+        flag = true;
+      }, wait);
     }
     function fn() {
       console.log("这是fn");
     }
 
+    // 手写call bind apply
+
     // 手写promise
+    class myPromise {
+      constructor(excuteFunction) {
+        this.initThis();
+        this.initValue();
+        try{
+          excuteFunction(this.resolve, this.reject);
+        } catch(e){
+          this.reject(e)
+        }
+        
+      }
+      initThis() {
+        this.resolve = this.resolve.bind(this);
+        this.reject = this.reject.bind(this);
+      }
+      initValue() {
+        this.promiseState = "pending";
+        this.promiseResult = null;
+      }
+      resolve(result) {
+        // 只能执行第一个
+        if(this.promiseState !== "pending") return 
+        this.promiseState = "fulfilled";
+        this.promiseResult = result;
+      }
+      reject(error) {
+        // 只能执行第一个
+        if(this.promiseState !== "pending") return 
+        this.promiseState = "rejected";
+        this.promiseResult = error;
+      }
+    }
+    
+    const test1 = new myPromise(resolve=>{
+      console.log(123)
+      resolve('success')
+      reject('fall')
+    })
+    console.log(test1)
   </script>
 </html>

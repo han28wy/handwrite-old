@@ -36,10 +36,6 @@
 
     //  探索async await
 
-    Promise.resolve(6).then(2).then(res=>{
-      console.log(res)
-      return 4
-    }).then(res2=>{console.log('ttt ',res2)})
 
 //     async function fun1(){
 //       console.log('fun1')
@@ -90,5 +86,38 @@
 //     setTimeout(()=>{
 //       console.log('timer2')  // 宏任务3
 //     },0)
+
+// Promise.reject('err!!!!').then((res)=>{
+//   console.log('success ',res)
+// }, (err)=>{console.log('error',err)}).catch(err=>{
+//   console.log('catch   ',err)
+// })
+
+// Promise.resolve(1).then(2).then(Promise.resolve(3)).then(res=>console.log(res))
+
+// new Promise((resolve)=>{
+//   console.log(1)
+//   setTimeout(()=>{
+//     console.log(2)
+//     resolve(3)
+//   },1000)
+// }).then(res=>{
+//   console.log('then ', res)
+// }).finally(r=>{
+//   console.log('fny ',r)
+// })
+
+const fin1 = new Promise((resolve)=>{
+  console.log(1)
+  setTimeout(()=>{
+    console.log(2)
+    resolve(3)
+    return 'ddff'
+  },0)
+})
+const fin2 = fin1.finally(()=>{
+  console.log('ffff ')
+})
+console.log('12eeee ',fin2)
   </script>
 </html>
