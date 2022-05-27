@@ -5,12 +5,26 @@
 
   <body>
     <button id="debounce" onClick="runProgram(1)">15</button>
+    <button id="debounce" onClick="runProgram(2)">16</button>
+    <button id="debounce" onClick="runProgram(3)">18</button>
   </body>
   <script>
     function runProgram(val) {
       if (val === 1) {
         let arr = [-1, 0, 1, 2, -1, -4];
         const res1 = fifteen(arr);
+        console.log(res1);
+      }
+      if (val === 2) {
+        let nums = [-1, 2, 1, -4];
+        let target = 1;
+        const res1 = sixteen(nums, target);
+        console.log(res1);
+      }
+      if (val === 3) {
+        let nums = [1, 0, -1, 0, -2, 2];
+        let target = 0;
+        const res1 = eighteen(nums, target);
         console.log(res1);
       }
     }
@@ -42,6 +56,61 @@
         }
       }
       return res;
+    }
+
+    // 给你一个长度为 n 的整数数组 nums 和 一个目标值 target。
+    // 请你从 nums 中选出三个整数，使它们的和与 target 最接近。
+    function sixteen(nums, target) {
+      nums = nums.sort((a, b) => a - b);
+      var len = nums.length;
+      // 设置第一个值 锚定值
+      var res = nums[0] + nums[1] + nums[len - 1];
+      for (let i = 0; i < len - 2; i++) {
+        let L = i + 1;
+        let R = len - 1;
+        while (L < R) {
+          let sum = nums[i] + nums[L] + nums[R];
+          if (Math.abs(res - target) > Math.abs(sum - target)) {
+            res = sum;
+          }
+          if (sum < target) {
+            L++;
+          } else if (sum > target) {
+            R--;
+          } else {
+            return sum;
+          }
+        }
+      }
+      return res;
+    }
+
+    function eighteen(nums, target) {
+      nums = nums.sort((a, b) => a - b);
+      if (len < 4 || nums[0] > target) return [];
+      var len = nums.length;
+      let res = []
+      for (let i = 0; i < len - 3; i++) {
+          if(nums[i]===nums[i+1]) continue
+        for (let j = i+1; i < len - 2; j++) {
+            if(nums[j]===nums[j+1]) continue
+          let L = j + 1;
+          let R = len - 1;
+          while (L < R) {
+            let sum = nums[i] + nums[j] + nums[L] + nums[R];
+            if (sum === target) {
+                res.push([nums[i],nums[j],nums[L],nums[R]])
+                while(L < R && nums[L] === nums[L+1]) ++L
+                while(L < R && nums[R] === nums[R-1]) --R
+            } else if (sum < target) {
+              L++;
+            } else {
+              R--;
+            }
+          }
+        }
+      }
+      return res
     }
   </script>
 </html>
