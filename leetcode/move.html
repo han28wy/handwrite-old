@@ -7,7 +7,7 @@
         <button id="debounce" onClick="runProgram(1)">5</button>
         <button id="debounce" onClick="runProgram(2)">10</button>
         <button id="debounce" onClick="runProgram(3)">22</button>
-        <button id="debounce" onClick="runProgram(4)">10</button>
+        <button id="debounce" onClick="runProgram(4)">32</button>
   </body>
   <script>
   function runProgram(val) {
@@ -22,13 +22,13 @@
         console.log(res1);
       }
       if (val === 3) {
-        let arr = ["((()))","(()())","(())()","()(())","()()()"];
+        let arr = 7;
         const res1 = f22(arr);
         console.log(res1);
       }
       if (val === 4) {
-        let arr = [-1, 0, 1, 2, -1, -4];
-        const res1 = fifteen(arr);
+        let arr = "(()";
+        const res1 = f32(arr);
         console.log(res1);
       }
   }
@@ -109,10 +109,40 @@
     return dp[sLen][pLen];
   }
   function f22(n){
-
+    if (n == 0) return [];
+    let data = new Map();
+    data.set(0, ['']);
+    for (let i = 1; i <= n; i++) {
+    let result = [];
+      for (let j = 0; j <= i - 1; j++) {
+        let center = data.get(j);
+        let right = data.get(i - 1 - j);
+        console.log('center ', j , '   ',center,'right ', i-1-j, '   ',right)
+        for (let k = 0; k < center.length; k++) {
+          for (let t = 0; t < right.length; t++) {
+            result.push(`(${center[k]})${right[t]}`);
+          }
+         }
+      }
+       data.set(i, result)
+       console.log('ressssult   ',data.get(i))
+     }
+    return data.get(n);
   }
-  function fifteen(arr){
 
+  function f32(s){
+    let res = []
+    for(let i=0;i<s.length;i++){
+if(s[i] === '('){
+  res.push('(')
+}else {
+  if(res.length === 0 || res[i-1] === ')') continue // 直接跳出循环
+  if(res[i-1] === '('){
+    res.push(')')
+  }
+}
+
+    }
   }
   </script>
 </html>
