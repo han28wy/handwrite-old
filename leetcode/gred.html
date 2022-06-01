@@ -59,44 +59,20 @@
       }
       return res;
     }
-    
     function minJump(nums) {
-      let max = 0; // 能跳到的最远位置
-      let res = 0;
-      let currJump = 0;
-      if(nums.length === 1) return 1
-      for (let i = 0; i < nums.length; i++) {
-        if (max < i) { // 没有跳出去
-          currJump = false
-          continue
-        }
-        max = Math.max(nums[i] + i, max);
-        if (max < nums.length-1) {
-          currJump++
-        }else{
-          if(res !== 0 && res>currJump){ // 能够跳出去，比较最小跳数
-            res = currJump
-          }
-        }
-      }
-      return res
-    }
-
-    function minJump2(nums) {
       // 跳完后能到达的最远位置（不管能不能到达终点） 最远位置：nums[k]+k；
       // 每一次的搜索区间是：[i+1, nums[i]+i]
       let jumpNum = 0;
       let start = 0;
-      let end = nums[0];
+      let end = 1;
       while (end < nums.length) {
-        let max = start;
+        let max = 0;
         for (let i = start + 1; i <= nums[start] + start + 1; i++) {
-          let currEndPoint = i + nums[i];
-          max = Math.max(max, currEndPoint);
+          max = Math.max(max, nums[i]+i);
         }
-        start = currEndRes;
-        end = currEndRes + nums[end];
-        jumpNum++;
+        start = end;// 下一次起跳点范围开始的格子
+        end = max + 1;// 下一次起跳点范围结束的格子
+        jumpNum++;  // 跳跃次数
       }
       return jumpNum;
     }
