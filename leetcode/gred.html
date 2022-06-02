@@ -26,6 +26,11 @@
         const res1 = jump(arr);
         console.log(res1);
       }
+      if (val === 4) {
+        let arr = [7,6,4,3,1];
+        const res1 = stock(arr);
+        console.log(res1);
+      }
     }
 
     function water2(height) {
@@ -86,6 +91,14 @@
         max = Math.max(nums[i] + i, max);
         if (max >= nums.length-1) return true;
       }
+    }
+    function stock(prices){
+      // 贪心算法；问题简化为有多少个小区间，之和最大
+      let res = 0
+      for(let i=1;i<prices.length;i++){
+        res = Math.max(res, res+prices[i]-prices[i-1])
+      }
+      return res
     }
   </script>
 </html>
