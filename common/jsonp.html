@@ -231,10 +231,6 @@
         let index = Math.floor(lists.length / 2)
     }
 
-    //   12基数排序
-
-    //   13桶排序
-
     //   14 js的二分查找
     // 要求查找的数组是有序的，key为目标
     function search(arr, key) {
@@ -253,54 +249,186 @@
         // 如果没有找到
         return -1
     }
-    
-// 16 实现字符串复制拼接
-function repeat(arr,n){
-    let a = new Array(n).fill(arr)
-    return a.join("")
-}
-function repeat2(arr,n){
-    return (new Array(n+1)).join(arr)
-}
-// rep1 = repeat('abc',3)
-// console.log(rep1)
-// rep2 = repeat2('cvb',4)
-// console.log(rep2)
 
-// 26 解析url
-function parseURL(url){
-    const a = document.createElement('a')
-    a.herf = url
-    return {
-        source:url,
-        protocal:a.protocol.replace(':',''),
-        host: a.hasAttribute,
-        port: a.port,
-        query: a.search, // 查询字符串
-        params: (function(){
-            let ret = {}
-            seg = a.search.replace(/^?/, '').split('&')
-            len = seg.length,i=0,s
-            for(let i=0;i<len;i++){
-                if(!seg[i]) continue
-                s = seg[i].split('=')
-                ret[s[0]]=decodeURIComponent(s[1])
-            }
-            return rec
-        })(),
-        file:(a.pathname.match(/\/([^\/?#]+)$/i) || [, ''])[1],
-        hash:a.hash.replace('#',''),
+    // 16 实现字符串复制拼接
+    function repeat(arr, n) {
+        let a = new Array(n).fill(arr)
+        return a.join("")
     }
-}
 
-function parseURL2(url){
-    var result = {}
-    var keys = ['href','origin','protocol','host','hostname','search','hash']
-}
+    function repeat2(arr, n) {
+        return (new Array(n + 1)).join(arr)
+    }
+    // rep1 = repeat('abc',3)
+    // console.log(rep1)
+    // rep2 = repeat2('cvb',4)
+    // console.log(rep2)
+
+    // 26 解析url
+    function parseURL(url) {
+        const a = document.createElement('a')
+        a.herf = url
+        return {
+            source: url,
+            protocal: a.protocol.replace(':', ''),
+            host: a.hasAttribute,
+            port: a.port,
+            query: a.search, // 查询字符串
+            params: (function () {
+                let ret = {}
+                seg = a.search.replace('/', '').split('&')
+                len = seg.length, i = 0, s
+                for (let i = 0; i < len; i++) {
+                    if (!seg[i]) continue
+                    s = seg[i].split('=')
+                    ret[s[0]] = decodeURIComponent(s[1])
+                }
+                return rec
+            })(),
+            file: (a.pathname.match(/\/([^\/?#]+)$/i) || [, ''])[1],
+            hash: a.hash.replace('#', ''),
+        }
+    }
+
+    function parseURL2(url) {
+        var result = {}
+        var keys = ['href', 'origin', 'protocol', 'host', 'hostname', 'search', 'hash']
+    }
+    // 12基数排序
+
+    // 3桶排序
+    // 时间复杂度o(m+n) 空间消耗很大，要提前知道最大和最小值
+    function bucketSort(arr) {
+        var newList = new Array(arr.length).fill(0)
+        arr.forEach(el => newList[el] += 1)
+        return newList.reduce((prev, curr, index) => {
+            for (let i = curr; i; i--) {
+                pre.push(index)
+            }
+            return pre
+        }, [])
+    }
 
 
+    // 36 手写快速排序
+    // 随便选择一个基准piv, 分成大于p和小于p的两组数
+    function quickSort(arr) {
+        if (arr.length <= 1) {
+            return arr
+        }
+        // 1. 找到数组的中间项，在原有的数组中把它移除
+        const middleIndex = Math.floor(arr.length / 2)
+        const middle = arr.splice(middleIndex, 1)[0]
+        // 2. 准备左右两个数组，循环剩下数组中的每一项，比当前项小的放到左边数组中，反之放到右边数组中
+        const leftArr = []
+        const rightArr = []
+        for (let i = 0; i < arr.length; i++) {
+            const current = arr[i]
+            current < middle ? leftArr.push(current) : rightArr.push(current)
+
+        }
+        // 3. 递归方式让左右两边的数组持续这样处理，一直到左右两边都排好序为止。
+        //（最后让左边+中间+右边拼接成最后的结果）
+        return quickSort(leftArr).concat(middle, quickSort(rightArr))
+    }
+
+    // 37 手写并归排序
+
+    // 38 手写希尔排序
+
+    // 39 手写插入排序
+    // 当成已经有一个构建好的有序数列，然后当前数，从后往前扫描有序数列
+    function insertSort(arr) {
+        for (let i = 1; i < arr.length; i++) {
+            let j = i - 1
+            while (arr[j] > arr[i] && j >= 0) { // 这是需要把前面的重新排序
+                arr[j + 1] = arr[j] //把arr[i]继续与前面的比较
+                j--
+            }
+            arr[j + 1] = arr[i]
+        }
+        return arr
+    }
+
+    // 40 选择排序
+    // 每次找到最小的，放到起始位置
+    function selectionSort(arr) {
+        for (let i = 0; i < arr.length - 1; i++) {
+            let currMin = arr[i]
+            let minIndex = i
+            for (let j = i + 1; j < arr.length; j++) {
+                if (currMin > arr[j]) {
+                    currMin = arr[j]
+                    minIndex = j
+                }
+            }
+            let temp = arr[i]
+            a[i] = currMin
+            arr[minIndex] = temp
+        }
+        return arr
+    }
+
+    // 41 冒泡排序
+    function bubble(arr) { // 从小到大排序
+        for (let i = 0; i < arr.length; i++) {
+            for (let j = 0; j < arr.length - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    let temp = arr[j + 1]
+                    arr[j + 1] = arr[j]
+                    arr[j] = temp
+                }
+            }
+        }
+        return arr
+    }
 
 
+    // 46 实现有并行限制的Promise调度器
+    // 保证同时运行的任务最多2个
+    class Schedule {
+        constructor(limit) {
+            this.queue = []
+            this.maxCount = 2
+            this.runCount = 0
+        }
+
+        add(promiseCreator) {
+            this.queue.push(promiseCreator)
+        }
+        taskStart() {
+            for (let i = 0; i < this.maxCount; i++) {
+                this.request()
+            }
+
+        }
+        request() {
+            if (!this.queue || !this.queue.length || this.runCount > this.maxCount) return
+            this.runCount++
+            this.queue.shift()().then(() => { //shift() 方法用于把数组的第一个元素从其中删除，并返回第一个元素的值。
+                this.runCount--
+                this.request()
+            })
+
+        }
+    }
+    const scheduler = new Schedule()
+    const timeout = time => {
+        new Promise(resolve => {
+            setTimeout(resolve, time)
+        })
+    }
+    const addTask = (time, order) => {
+        scheduler.add(time,order)
+    }
+
+    // addTask(1000, '1')
+    // addTask(600, '2')
+    // addTask(700, '3')
+    // addTask(500, '4')
+    // addTask(200, '5')
+    // addTask(100, '6')
+    // scheduler.taskStart()
 
     //   66 实现上拉加载，下拉刷新
 
