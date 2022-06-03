@@ -1,0 +1,73 @@
+<html>
+
+<head style="background: lightseagreen;">
+</head>
+
+<body>
+</body>
+<script>
+    //   1 手写jsonp
+    //设计原理是，客户传递一个callback参数给服务器端，然后服务器返回数据时候把callback参数作为函数名来包裹住JSON数据，
+    //并构造出一个执行该函数的字符串，返回的字符串能直接作为js执行，这样客户端就可以定制自己的函数以处理返回的数据
+    // 因为script标签发起的请求的 response 的 content-type 是application/javascript ，这样保证返回的字符串能当做js直接执行，就和一个js文件一样。
+    function jsonp(url, params, callback) {
+        // 判断是否有参数
+        let queryString = url.indexof("?") === "-1" ? "?" : "&"
+        //添加参数
+        for (var k in params) {
+            if (params.hasOwnProperty(k)) {
+                queryString += k + "=" + params[k] + "&"
+            }
+        }
+        //处理回调函数名
+        let random = Math.random().toString.replace(".","")
+        callbackName = "myJsonp"+random
+        //添加回调函数到处理后的参数里
+        queryString+="callback="+callbackName
+        //封装请求
+        let scriptNode = document.createElement("script")
+        scriptNode.src = url+queryString
+
+        window[callbackName] = function(){
+            // 调用这个回调函数
+            callback(...arguments)
+            // 删除这个引入的脚本
+            document.getElementsByTagName("head")[0].removeChild(scriptNode)
+        }
+        // 发起请求
+        document.getElementsByTagName("head")[0].appendChild(scriptNode)
+    }
+
+    //   2 用promise实现每隔一秒输出1 2 3
+
+    //   3 手写promise.all
+
+    //   4 查找英文文章中出现频率最高的单词
+
+    //   5 封装js类型判断函数
+
+    //   6 实现lodash中的get函数
+
+    //   7 实现斐波那契数列
+
+    //   8 全排列
+
+    //   9 防抖
+
+    //   10 节流
+
+    //   11 合并k个升序链表
+
+    //   12基数排序
+
+    //   13桶排序
+
+    //   14 js的二分查找
+
+
+    //   66 实现上拉加载，下拉刷新
+
+    //   69 购物车的逻辑
+</script>
+
+</html>
