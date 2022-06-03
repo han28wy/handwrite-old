@@ -20,15 +20,15 @@
             }
         }
         //处理回调函数名
-        let random = Math.random().toString.replace(".","")
-        callbackName = "myJsonp"+random
+        let random = Math.random().toString.replace(".", "")
+        callbackName = "myJsonp" + random
         //添加回调函数到处理后的参数里
-        queryString+="callback="+callbackName
+        queryString += "callback=" + callbackName
         //封装请求
         let scriptNode = document.createElement("script")
-        scriptNode.src = url+queryString
+        scriptNode.src = url + queryString
 
-        window[callbackName] = function(){
+        window[callbackName] = function () {
             // 调用这个回调函数
             callback(...arguments)
             // 删除这个引入的脚本
@@ -39,30 +39,267 @@
     }
 
     //   2 用promise实现每隔一秒输出1 2 3
+    // reduce((pre,curr,index,arr)=>{}, init)
+    function f1() {
+        const arr = [1, 2, 3]
+        arr.reduce((p, x) => {
+            return p.then(() => {
+                return new Promise(resolve => {
+                    setTimeout(() => resolve(console.log(x)), 1000)
+                })
+            })
+        }, Promise.resolve())
+    }
 
+    // 这个是只用定时器实现
+    function f2() {
+        for (let i = 1; i < 4; i++) {
+            setTimeout(function () {
+                console.log(j)
+            }, 1000 * i)
+        }
+    }
+    // promise版本
+    // 结果还是不太对啊
+    // var i = 1
+    // while (i < 4) {
+    //     let proRes = _pro(i)
+    //     proRes.then((r) => {
+    //         console.log(r)
+    //     })
+    //     i = i + 1
+    // }
+
+    // function _pro(interval) {
+    //     console.log(11111)
+    //     return new Promise((resolve) => {
+    //         setTimeout(() => {
+    //             resolve(interval)
+    //         }, 1000)
+    //     })
+    // }
     //   3 手写promise.all
+    function myPromiseAll(promiseList) {
+        return new Promise((resolve, reject) => {
+            let resList = []
+            let count = 0
+            for (let i = 0; i < promiseList.length; i++) {
+                promiseList[i].then(result => {
+                    resList[i] = result
+                    count++
+                    if (count === promiseList.length) {
+                        resolve(resList)
+                    }
+                }).catch(() => {
+                    reject('eee')
+                })
+            }
+        }, (err) => {
+            return reject(error);
+        })
+    }
+    let p1 = new Promise(function (resolve, reject) {
+        setTimeout(function () {
+            resolve(1);
+        }, 1000);
+    });
+    let p2 = new Promise(function (resolve, reject) {
+        setTimeout(function () {
+            resolve(2);
+        }, 2000);
+    });
+    let p3 = new Promise(function (resolve, reject) {
+        setTimeout(function () {
+            resolve(3);
+        }, 3000);
+    });
+    // myPromiseAll([p3, p1, p2]).then((res) => {
+    //     console.log(res); // [3, 1, 2]
+    // });
 
     //   4 查找英文文章中出现频率最高的单词
+    function findMostWord(article) {
+        let resNum = 0
+        let res = ''
+        article = article.trim().toLowerCase()
+        let wordMap = new Map()
+        let reg = new RegExp("[a-z]")
+        for (let i = 0; i < article.length; i++) {
+            if (!reg.test(article[i])) {
+                console.log('找到了不符合的字母 ', article[i])
+                continue
+            }
+            if (wordMap.get(article[i])) {
+                val = wordMap.get(article[i]) + 1
+                wordMap.set(article[i], val)
+                if (resNum < val) {
+                    res = article[i]
+                    resNum = val
+                }
+            } else {
+                wordMap.set(article[i], 1)
+            }
+        }
+        console.log(res)
+        console.log(resNum)
+        return res
+    }
+    // findMostWord('a?ab-bbccd')
 
-    //   5 封装js类型判断函数
+    //   5 封装js的类型判断函数
+    function type(value) {
+        console.log(value)
+        if (value === null) return value + ""
+        // 判断引用类型的情况
+        //  Object.prototype.toString.call(value) Object.hasOwnProperty.toString.call(value)
+        if (typeof value === "object") {
+            console.log(123)
+            let valueClass = Object.prototype.toString.call(value)
+            type = valueClass.split(" ")[1]
+            type = type.substring(0, type.length - 1)
+            return type
+        } else {
+            console.log(234)
+            return typeof value
+        }
+    }
+    // res = type({name:'345',age:123})
 
     //   6 实现lodash中的get函数
 
     //   7 实现斐波那契数列
+    function fbnc(n) {
+        // 会出现内存不够大的情况
+        if (n === 1) return 1
+        if (n === 2) return 1
+        return fbnc(n - 1) + fbnc(n - 2)
+    }
+    res1 = fbnc(3)
 
+    function fbnc2(n) {
+        var n1 = 1,
+            n2 = 1,
+            sum = n2;
+        for (let i = 2; i < n; i++) {
+            sum = n1 + n2
+            n1 = n2
+            n2 = sum
+        }
+        return sum
+    }
+    res2 = fbnc2(3)
     //   8 全排列
+    function all(list) {
+        if (list.length === 1) return list
+        var res = list.reduce((result, property) => {
+            console.log('result   ,', result)
+            return property.reduce((acc, value) => {
+                return acc.concat(result.map(ele => [].concat(ele, value)))
+            }, [])
+        })
+        return res.map(arr => arr.join("+"))
+    }
+    // var tr = all([
+    //     [1, 2, 3],
+    //     ['a', 'b']
+    // ])
 
     //   9 防抖
 
-    //   10 节流
+
+    //   10 节流 我觉得这个需要好好打磨一下
+    var flag = true
+
+    function throttle1(fn, delay = 1000) {
+        if (!flag) return
+        setTimeout(function () {
+            fn()
+            flag = true
+        }, delay)
+        flag = false
+    }
+
+    function output() {
+        console.log('输出')
+    }
 
     //   11 合并k个升序链表
+    function merge(lists) {
+        if (lists.length === 0) return null
+        if (lists.length === 1) return lists[0]
+
+        let index = Math.floor(lists.length / 2)
+    }
 
     //   12基数排序
 
     //   13桶排序
 
     //   14 js的二分查找
+    // 要求查找的数组是有序的，key为目标
+    function search(arr, key) {
+        let start = 0
+        let end = arr.length - 1
+        while (start < end) {
+            let mid = parseInt((start + end) / 2)
+            if (key === arr[mid]) {
+                return mid
+            } else if (key > arr[mid]) {
+                start = mid + 1
+            } else {
+                end = mid - 1
+            }
+        }
+        // 如果没有找到
+        return -1
+    }
+    
+// 16 实现字符串复制拼接
+function repeat(arr,n){
+    let a = new Array(n).fill(arr)
+    return a.join("")
+}
+function repeat2(arr,n){
+    return (new Array(n+1)).join(arr)
+}
+// rep1 = repeat('abc',3)
+// console.log(rep1)
+// rep2 = repeat2('cvb',4)
+// console.log(rep2)
+
+// 26 解析url
+function parseURL(url){
+    const a = document.createElement('a')
+    a.herf = url
+    return {
+        source:url,
+        protocal:a.protocol.replace(':',''),
+        host: a.hasAttribute,
+        port: a.port,
+        query: a.search, // 查询字符串
+        params: (function(){
+            let ret = {}
+            seg = a.search.replace(/^?/, '').split('&')
+            len = seg.length,i=0,s
+            for(let i=0;i<len;i++){
+                if(!seg[i]) continue
+                s = seg[i].split('=')
+                ret[s[0]]=decodeURIComponent(s[1])
+            }
+            return rec
+        })(),
+        file:(a.pathname.match(/\/([^\/?#]+)$/i) || [, ''])[1],
+        hash:a.hash.replace('#',''),
+    }
+}
+
+function parseURL2(url){
+    var result = {}
+    var keys = ['href','origin','protocol','host','hostname','search','hash']
+}
+
+
+
 
 
     //   66 实现上拉加载，下拉刷新
