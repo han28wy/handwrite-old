@@ -205,7 +205,13 @@
     // ])
 
     //   9 防抖
-
+    function debounce(fn, delay) {
+        let timer = null
+        clearTimeout(timer)
+        timer = setTimeout(() => {
+            fn()
+        }, delay)
+    }
 
     //   10 节流 我觉得这个需要好好打磨一下
     var flag = true
@@ -264,6 +270,40 @@
     // rep2 = repeat2('cvb',4)
     // console.log(rep2)
 
+    // 21 生成1-1000的数组
+    function f() {
+        return Array.from(new Array(1000).keys()).slice(1)
+    }
+
+    // 23 用setTimeout实现setInterval
+    // 这个答案写完之后感觉不太对
+    // function mySetInterval(fn,timeout){
+    //     var tiner ={
+    //         flag:true
+    //     }
+    //     function interval(){
+    //         if(timer.flag){
+    //             fn()
+    //             setTimeout(interval,timeout)
+    //         }
+    //     }
+    //     setTimeout(interval, timeout)
+    //     return timer
+    // }
+
+    function myInterval(fn, interval) {
+        function interval() {
+            setTimeout(interval, interval);
+            fn();
+        }
+        setTimeout(interval, interval)
+    }
+    // function test(){
+    //     console.log('我在test interval')
+    // }
+    // myInterval(test, 2000)
+
+
     // 26 解析url
     function parseURL(url) {
         const a = document.createElement('a')
@@ -290,10 +330,10 @@
         }
     }
 
-    function parseURL2(url) {
-        var result = {}
-        var keys = ['href', 'origin', 'protocol', 'host', 'hostname', 'search', 'hash']
-    }
+    // function parseURL2(url) {
+    //     var result = {}
+    //     var keys = ['href', 'origin', 'protocol', 'host', 'hostname', 'search', 'hash']
+    // }
     // 12基数排序
 
     // 3桶排序
@@ -419,9 +459,8 @@
         })
     }
     const addTask = (time, order) => {
-        scheduler.add(time,order)
+        scheduler.add(time, order)
     }
-
     // addTask(1000, '1')
     // addTask(600, '2')
     // addTask(700, '3')
@@ -430,7 +469,99 @@
     // addTask(100, '6')
     // scheduler.taskStart()
 
+
+    // 50 实现object.assign
+    // 浅拷贝
+    // 这个写的是什么，我也看不太懂
+    Object.defineProperties(Object, 'assign', {
+        value: function (target, ...args) {
+            if (target === null) {
+                return new TypeError('error !!')
+            }
+            const to = Object(target) // 目标对象需要统一是引用类型，否则不会自动转化的
+            for (let i = 0; i < args.length; i++) {
+                const nextSource = args[i]
+                if (nextSource !== null) {
+                    for (const nextKey in nextSource) {
+                        if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+                            to[nextKey] = nextSource[nextKey]
+                        }
+                    }
+                }
+            }
+            return to
+        }
+    })
+
+    // 52 实现函数柯里化
+    function add() {
+        const _args = [...arguments]
+
+        function fn() {
+            _args.push(...arguments)
+            return fn
+        }
+        fn.toString = function () {
+            return _args.reduce((sum, cur) => {
+                sum + cur
+            })
+        }
+        return fn
+    }
+
+    // 59 实现forEach
+    Array.prototype.forEach = function (callback, context) {
+      for(let i=0;i<this.length;i++){
+          callback.call(context, this[i], i)
+      }
+    }
+    // 60 实现map
+    Array.prototype.map = function(fn){
+        let newArr = []
+        for(let i=0;i<this.length;i++){
+            newArr.push(fn(this[i],i,this))
+        }
+        return newArr
+    }
+    // 比较一下forEach和map
+    // 传参(curr, index, array)
+    // map 不改变原来的数组，返回新数组，break可以终止循环，可以用return返回到外层的函数
+    // forEach 其实和for差不多，没有返回值，不能中断，不能返回到外层函数
+
+// 65 数组去重的很多种方法
+// 1用set   Array.from(new Set(arr))
+// 2 双层for+splice
+const unique2 = arr=>{
+    let len = arr.length
+    for(let i=0;i<len;i++){
+        for(let j=i+1;j<len;i++){
+            if(arr[i]===arr[j]){
+                arr.splice(j,1)
+                len--
+                j--
+            }
+        }
+    }
+    return arr
+}
+// 3 indexof 与include同理
+const unique3 = arr=>{
+    const res = []
+    for(let i=0;i<len;i++){
+        if(res.indexof(arr[i])=== -1){
+            res.push(arr[i])
+        }
+    }
+}
+// 4 filter
+const unique4 = arr=>{
+    return arr.filter((item,index)=>{
+        return arr.indexof(item)===item
+    })
+}
     //   66 实现上拉加载，下拉刷新
+   // 这里面说了一些第三方的解决方案 iscroll better-scroll pulltorefresh.jsonp
+
 
     //   69 购物车的逻辑
 </script>
