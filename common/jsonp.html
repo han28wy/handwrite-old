@@ -6,6 +6,79 @@
 <body>
 </body>
 <script>
+    const treeArray = [{
+            id: 1,
+            name: '部门1',
+            pid: 0
+        },
+        {
+            id: 2,
+            name: '部门2',
+            pid: 1
+        },
+        {
+            id: 3,
+            name: '部门3',
+            pid: 1
+        },
+        {
+            id: 4,
+            name: '部门4',
+            pid: 3
+        },
+        {
+            id: 5,
+            name: '部门5',
+            pid: 4
+        },
+        {
+            id: 6,
+            name: '部门6',
+            pid: 3
+        },
+    ]
+    // 扁平化数组
+    // 递归  这个方法是性能蛮差的方法
+    function getChildNode(arr, id) {
+        const res = []
+        for (const item of arr) {
+            if (item.pid === id) {
+                res.push({
+                    ...item,
+                    children: getChildNode(arr, item.id)
+                })
+            }
+        }
+        return res
+    }
+
+    // 用map的方法
+    function flateen2(arr,pid){
+      let map=new Map()
+      for(let item in arr){
+          if(!map.has(item.id)){
+              map.set(item.id, {...item, children:[]})
+          }else{
+              map.set(item.id, {...map.get(item.id),...item})
+          }
+
+          if(map.has(item.pid)){
+              map.get(item.pid).children.push(map.get(item.id))
+
+          }else{
+              map.set(item.pid, {children:[map.get(item.id)]})
+          }
+
+      }
+    }
+
+
+    // 测试一下
+    // const treeRes = getChildNode(treeArray, 0)
+    const treeRes = flateen2(treeArray, 0)
+    console.log(8888)
+    console.log(treeRes)
+
     //   1 手写jsonp
     //设计原理是，客户传递一个callback参数给服务器端，然后服务器返回数据时候把callback参数作为函数名来包裹住JSON数据，
     //并构造出一个执行该函数的字符串，返回的字符串能直接作为js执行，这样客户端就可以定制自己的函数以处理返回的数据
@@ -473,25 +546,25 @@
     // 50 实现object.assign
     // 浅拷贝
     // 这个写的是什么，我也看不太懂
-    Object.defineProperties(Object, 'assign', {
-        value: function (target, ...args) {
-            if (target === null) {
-                return new TypeError('error !!')
-            }
-            const to = Object(target) // 目标对象需要统一是引用类型，否则不会自动转化的
-            for (let i = 0; i < args.length; i++) {
-                const nextSource = args[i]
-                if (nextSource !== null) {
-                    for (const nextKey in nextSource) {
-                        if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
-                            to[nextKey] = nextSource[nextKey]
-                        }
-                    }
-                }
-            }
-            return to
-        }
-    })
+    // Object.defineProperties(Object, 'assign', {
+    //     value: function (target, ...args) {
+    //         if (target === null) {
+    //             return new TypeError('error !!')
+    //         }
+    //         const to = Object(target) // 目标对象需要统一是引用类型，否则不会自动转化的
+    //         for (let i = 0; i < args.length; i++) {
+    //             const nextSource = args[i]
+    //             if (nextSource !== null) {
+    //                 for (const nextKey in nextSource) {
+    //                     if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+    //                         to[nextKey] = nextSource[nextKey]
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         return to
+    //     }
+    // })
 
     // 52 实现函数柯里化
     function add() {
@@ -511,15 +584,15 @@
 
     // 59 实现forEach
     Array.prototype.forEach = function (callback, context) {
-      for(let i=0;i<this.length;i++){
-          callback.call(context, this[i], i)
-      }
+        for (let i = 0; i < this.length; i++) {
+            callback.call(context, this[i], i)
+        }
     }
     // 60 实现map
-    Array.prototype.map = function(fn){
+    Array.prototype.map = function (fn) {
         let newArr = []
-        for(let i=0;i<this.length;i++){
-            newArr.push(fn(this[i],i,this))
+        for (let i = 0; i < this.length; i++) {
+            newArr.push(fn(this[i], i, this))
         }
         return newArr
     }
@@ -528,39 +601,40 @@
     // map 不改变原来的数组，返回新数组，break可以终止循环，可以用return返回到外层的函数
     // forEach 其实和for差不多，没有返回值，不能中断，不能返回到外层函数
 
-// 65 数组去重的很多种方法
-// 1用set   Array.from(new Set(arr))
-// 2 双层for+splice
-const unique2 = arr=>{
-    let len = arr.length
-    for(let i=0;i<len;i++){
-        for(let j=i+1;j<len;i++){
-            if(arr[i]===arr[j]){
-                arr.splice(j,1)
-                len--
-                j--
+    // 65 数组去重的很多种方法
+    // 1用set   
+    Array.from(new Set(arr))
+    // 2 双层for+splice
+    const unique2 = arr => {
+        let len = arr.length
+        for (let i = 0; i < len; i++) {
+            for (let j = i + 1; j < len; i++) {
+                if (arr[i] === arr[j]) {
+                    arr.splice(j, 1)
+                    len--
+                    j--
+                }
+            }
+        }
+        return arr
+    }
+    // 3 indexof 与include同理
+    const unique3 = arr => {
+        const res = []
+        for (let i = 0; i < len; i++) {
+            if (res.indexof(arr[i]) === -1) {
+                res.push(arr[i])
             }
         }
     }
-    return arr
-}
-// 3 indexof 与include同理
-const unique3 = arr=>{
-    const res = []
-    for(let i=0;i<len;i++){
-        if(res.indexof(arr[i])=== -1){
-            res.push(arr[i])
-        }
+    // 4 filter
+    const unique4 = arr => {
+        return arr.filter((item, index) => {
+            return arr.indexof(item) === item
+        })
     }
-}
-// 4 filter
-const unique4 = arr=>{
-    return arr.filter((item,index)=>{
-        return arr.indexof(item)===item
-    })
-}
     //   66 实现上拉加载，下拉刷新
-   // 这里面说了一些第三方的解决方案 iscroll better-scroll pulltorefresh.jsonp
+    // 这里面说了一些第三方的解决方案 iscroll better-scroll pulltorefresh.jsonp
 
 
     //   69 购物车的逻辑
