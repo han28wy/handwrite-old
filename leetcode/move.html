@@ -4,14 +4,14 @@
   </head>
 
   <body>
-    <button id="debounce" onClick="runProgram(14)">2两数相加</button>
-    <button id="debounce" onClick="runProgram(15)">3 滑动窗口</button>
+    <!-- <button id="debounce" onClick="runProgram(14)">2 两数相加</button> -->
+    <button id="debounce" onClick="runProgram(15)">3 无重复字符的最长子串</button>
     <button id="debounce" onClick="runProgram(16)">4 正序数组的中位数</button>
-    <button id="debounce" onClick="runProgram(1)">5</button>
-    <button id="debounce" onClick="runProgram(2)">10</button>
-    <button id="debounce" onClick="runProgram(3)">22</button>
-    <button id="debounce" onClick="runProgram(4)">32</button>
-    <button id="debounce" onClick="runProgram(5)">42</button>
+    <button id="debounce" onClick="runProgram(1)">5 最长回文子串</button>
+    <button id="debounce" onClick="runProgram(2)">10 正则表达式匹配</button>
+    <button id="debounce" onClick="runProgram(3)">22 括号生成</button>
+    <button id="debounce" onClick="runProgram(4)">32 最长有效括号</button>
+    <button id="debounce" onClick="runProgram(5)">42 接雨水</button>
     <button id="debounce" onClick="runProgram(6)">53 最大子数和</button>
     <button id="debounce" onClick="runProgram(7)">62 不同路径</button>
     <button id="debounce" onClick="runProgram(8)">64 最小路径</button>
@@ -71,7 +71,7 @@
         console.log(res1);
       }
       if (val === 9) {
-        let arr = 3;
+        let arr = 5;
         const res1 = climb(arr);
         console.log(res1);
       }
@@ -224,7 +224,7 @@ function f4(nums1,nums2){
       }
       return dp[sLen][pLen];
     }
-
+// 就是双层遍历了
     function f22(n) {
       if (n == 0) return [];
       let data = new Map();
@@ -234,16 +234,6 @@ function f4(nums1,nums2){
         for (let j = 0; j <= i - 1; j++) {
           let center = data.get(j);
           let right = data.get(i - 1 - j);
-          console.log(
-            "cen9ter ",
-            j,
-            "   ",
-            center,
-            "right ",
-            i - 1 - j,
-            "   ",
-            right
-          );
           for (let k = 0; k < center.length; k++) {
             for (let t = 0; t < right.length; t++) {
               result.push(`(${center[k]})${right[t]}`);
@@ -254,7 +244,7 @@ function f4(nums1,nums2){
       }
       return data.get(n);
     }
-
+    // 这个栈的做法就是各种特殊情况的处理
     function f32(s) {
       let max = 0;
       let stack = [];
