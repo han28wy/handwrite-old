@@ -8,6 +8,34 @@
     <button id="throttle">点我节流！</button>
   </body>
   <script>
+    var copy={
+      name:'124',
+      age:1,
+      arr: ['adf', 'rty',1,2,3],
+      other:{
+        one:1,
+        two:2
+      }
+      // function: myName(){
+      //   console.log(this.name)
+      // }
+    }
+    // var copy2 = copy
+    // copy2.name = 'abc'
+    // console.log('copy   ',copy)
+    // console.log('copy2   ',copy2) // 浅拷贝 两个obj同步改
+    // var copy3 = Object.assign(copy)
+    // copy3.name='ert'
+    // console.log('copy   ',copy)
+    // console.log('copy3   ',copy3) // 浅拷贝 两个obj同步改
+
+    var copy4 = JSON.parse(JSON.stringify(copy))
+    copy4.name = 'fgh'
+    copy4.arr = [1,2,3,4]
+    copy4.other.one = 444
+    console.log('copy   ',copy)
+    console.log('copy4   ',copy4) // 深拷贝了,第二层的也正确改好了；但是对一些特殊情况的处理有问题
+
     ///////////////////////////////////////
     window.onload = function () {
       var myDebounce = document.getElementById("debounce1");
