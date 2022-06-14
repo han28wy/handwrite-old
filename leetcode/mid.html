@@ -4,6 +4,9 @@
   </head>
   <body>
     <button id="debounce" onClick="runProgram(1)">17 电话号码组合</button>
+    <button id="debounce" onClick="runProgram(6)">18 四数和</button>
+    <button id="debounce" onClick="runProgram(7)">23 合并升序链表</button>
+    <button id="debounce" onClick="runProgram(5)">33 搜索旋转排序数组</button>
     <button id="debounce" onClick="runProgram(2)">45 最小跳跃</button>
     <button id="debounce" onClick="runProgram(3)">55 跳跃游戏</button>
     <button id="debounce" onClick="runProgram(4)">122 股票2</button>
@@ -13,6 +16,24 @@
       if (val === 1) {
         let arr = "23";
         const res1 = telephone(arr);
+        console.log(res1);
+      }
+      if (val === 5) {
+        let nums = [1, 3],
+          target = 1;
+        const res1 = f33(nums, target);
+        console.log(res1);
+      }
+      if (val === 6) {
+        let nums = [-2,-1,-1,1,1,2,2],
+          target = 0;
+        const res1 = f18(nums, target);
+        console.log(res1);
+      }
+      if (val === 7) {
+        let nums = [-2,-1,-1,1,1,2,2],
+          target = 0;
+        const res1 = f23(lists);
         console.log(res1);
       }
     }
@@ -48,6 +69,93 @@ const merge = (arr, str) => {  //将str每个字符与arr已有字符串进行�
         }
     }
     return newArr;
+    }
+    function f18(nums, target) {
+      if(nums.length < 4) return []
+      let res = []
+      nums.sort((a,b)=>a-b)
+      for(let i=0;i<nums.length-3;i++){
+        // debugger
+        if(nums[i]===nums[i-1] && i>0) {continue}
+        for(let j=i+1;j<nums.length-2;j++){
+          if(nums[j]===nums[j-1] && j>i+1) {continue}
+          let L=j+1
+          let R=nums.length-1
+          while(L<R){
+            let sum = nums[i]+nums[j]+nums[L]+nums[R]
+            if(sum === target){
+              res.push([nums[i],nums[j],nums[L],nums[R]])
+              while(L<R && nums[L] === nums[L+1]){
+                L++
+              }
+              L++
+              while(L<R && nums[R] === nums[R-1]){
+                R--
+              }
+              R--
+            }else if(sum < target){
+              L++
+              // if(nums[L]===nums[++L]){
+              //   L++
+              // }
+            }else{
+              R--
+              // if(nums[R]===nums[--R]){
+              //   R--
+              // }
+            }
+          }   
+        }
+      }
+      return res
+    }
+    
+    function f23(lists){
+      if(lists.length === 1) return lists[0]
+      let res = lists[0]
+      for(let i=1;i<lists.length;i++){
+        for(let i=0;i<res.length;i++){
+          if(res[i].val>lists[i][i].val){
+            res[i-1].next = lists[i][i]
+            lists[i][i].next = res[i]
+          }
+        }
+      }
+      return res
+    }
+
+    function f33(nums, target) {
+      let len = nums.length;
+      if (len === 0) return -1;
+      if (len === 1) {
+        return nums[0] === target ? 0 : -1;
+      }
+      let left = 0;
+      let right = len - 1;
+      while (left <= right) {
+        let mid = left + Math.floor((right - left) / 2);
+        if (nums[mid] == target) return mid;
+        // 右边有序
+        if (nums[mid] < nums[right]) {
+          // 目标值在右边
+          if (target > nums[mid] && target <= nums[right]) {
+            left = mid + 1;
+            // 目标值在左边
+          } else {
+            right = mid - 1;
+          }
+          // 左边有序
+        } else {
+          // 目标值在左边
+          if (target >= nums[left] && target < nums[mid]) {
+            right = mid - 1;
+            // 目标值在右边
+          } else {
+            left = mid + 1;
+          }
+        }
+      }
+      return -1;
     }
   </script>
 </html>
