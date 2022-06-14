@@ -1,40 +1,78 @@
 <html>
-  <head style="background: lightseagreen"> </head>
 
-  <body></body>
-  <script>
-    const treeArray = [
-      {
-        id: 1,
-        name: "部门1",
-        pid: 0,
-      },
-      {
-        id: 2,
-        name: "部门2",
-        pid: 1,
-      },
-      {
-        id: 3,
-        name: "部门3",
-        pid: 1,
-      },
-      {
-        id: 4,
-        name: "部门4",
-        pid: 3,
-      },
-      {
-        id: 5,
-        name: "部门5",
-        pid: 4,
-      },
-      {
-        id: 6,
-        name: "部门6",
-        pid: 3,
-      },
-    ];
+<head style="background: lightseagreen;">
+</head>
+
+<body>
+</body>
+<script>
+    // 实现双向数据绑定mvvm
+    // Object.defineProperties劫持数据(属性所在对象，属性名，一个描述符对象)
+// 描述性对象有下面几种属性，configurable,enumerable,writable,value
+//第一步遍历对象的每个属性，添加监听器
+// function observe(data){
+//     if(data === null || typeof data !== 'object') return 
+//     for(let item in data){
+//         defineProp(data,item, data[item])
+//     }
+// }
+// function defineProp(data,key,childValue){
+//     observe(childValue) //在监听子属性
+//     Object.defineProperties(data,key,{
+//         set:(newValue)=>{
+//             console.log('我再set新属性')
+//             childValue = newValue
+//         },
+//         get:()=>{
+//             return childValue
+//         },
+//         enumerable:true,
+//         cofigurable:false
+//     })
+// }
+
+// const dataTest={
+//     name:'han',
+//     lastName: 'xue',
+//     age: 20,
+//     sex:0
+// }
+// observe(dataTest)
+// dataTest.name = 'hhhh'
+// console.log(dataTest.name)
+
+
+    const treeArray = [{
+            id: 1,
+            name: '部门1',
+            pid: 0
+        },
+        {
+            id: 2,
+            name: '部门2',
+            pid: 1
+        },
+        {
+            id: 3,
+            name: '部门3',
+            pid: 1
+        },
+        {
+            id: 4,
+            name: '部门4',
+            pid: 3
+        },
+        {
+            id: 5,
+            name: '部门5',
+            pid: 4
+        },
+        {
+            id: 6,
+            name: '部门6',
+            pid: 3
+        },
+    ]
     // 扁平化数组
     // 递归  这个方法是性能蛮差的方法
     function getChildNode(arr, id) {
@@ -51,20 +89,21 @@
     }
 
     // 用map的方法
-    function flateen2(arr, pid) {
-      let map = new Map();
-      for (let item in arr) {
-        if (!map.has(item.id)) {
-          map.set(item.id, { ...item, children: [] });
-        } else {
-          map.set(item.id, { ...map.get(item.id), ...item });
-        }
+    function flateen2(arr,pid){
+      let map=new Map()
+      for(let item in arr){
+          if(!map.has(item.id)){
+              map.set(item.id, {...item, children:[]})
+          }else{
+              map.set(item.id, {...map.get(item.id),...item})
+          }
 
-        if (map.has(item.pid)) {
-          map.get(item.pid).children.push(map.get(item.id));
-        } else {
-          map.set(item.pid, { children: [map.get(item.id)] });
-        }
+          if(map.has(item.pid)){
+              map.get(item.pid).children.push(map.get(item.id))
+
+          }else{
+              map.set(item.pid, {children:[map.get(item.id)]})
+          }
       }
     }
 
@@ -263,18 +302,20 @@
     res2 = fbnc2(3);
     //   8 全排列
     function all(list) {
-      if (list.length === 1) return list;
-      var res = list.reduce((result, property) => {
-        console.log("result   ,", result);
-        return property.reduce((acc, value) => {
-          return acc.concat(result.map((ele) => [].concat(ele, value)));
-        }, []);
-      });
-      return res.map((arr) => arr.join("+"));
+        if (list.length === 1) return list
+        var res = list.reduce((result, property) => {
+            console.log('property       ', property)
+            return property.reduce((acc, value) => {
+                console.log('acc    ',acc,'   result  ',result)
+                return acc.concat(result.map(ele => [].concat(ele, value)))
+            }, [])
+        })
+        return res.map(arr => arr.join("+"))
     }
     // var tr = all([
     //     [1, 2, 3],
-    //     ['a', 'b']
+    //     ['a', 'b'],
+    //     [7,8,9]
     // ])
 
     //   9 防抖
@@ -601,8 +642,8 @@
     // forEach 其实和for差不多，没有返回值，不能中断，不能返回到外层函数
 
     // 65 数组去重的很多种方法
-    // 1用set
-    Array.from(new Set(arr));
+    // 1用set   
+    // Array.from(new Set(arr))
     // 2 双层for+splice
     const unique2 = (arr) => {
       let len = arr.length;
