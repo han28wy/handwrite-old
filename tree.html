@@ -118,8 +118,22 @@
         })
         return tree
     }
-    const newAddTree = operateNode(tree, {id:12,pid:2,children:[]})
-    console.log('新增后的node')
-    console.log(newAddTree)
+    // const newAddTree = operateNode(tree, {id:12,pid:2,children:[]})
+    // console.log('新增后的node')
+    // console.log(newAddTree)
+    
+    // 手写树形结构扁平化
+    function flatTree(res, tree){
+      tree.reduce((pre,curr)=>{
+        res=pre.push({id:curr.id,pid:curr.pid})
+        if(curr.children.length>0){
+          return flatTree(res, curr.children)
+        }
+      })
+      return res
+    }
+    var flatResult = flatTree(tree)
+    console.log('tyr444 ')
+    console.log(flatResult)
   </script>
 </html>
