@@ -3,10 +3,23 @@
     header
   </head>
   <body>
-    <footer>
-    </footer>
+    <div>实现轮播图</div>
+    <div class="out">
+      <div class="inner_pic">
+        <div class="pic" v-for="item in picList" :key="item.id">
+          <span>${item.text}</span>
+        </div>
+      </div>
+    </div>
   </body>
   <script>
+    var picList=[
+      {id:1,text:'1'},
+      {id:2,text:'2'},
+      {id:3,text:'3'},
+      {id:4,text:'4'},
+      {id:5,text:'5'},
+    ]
     // 听说这是一个字节实习题目
     // const pro = new Promise((resolve,reject)=>{
     //   console.log('1')
