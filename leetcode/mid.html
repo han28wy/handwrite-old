@@ -1,4 +1,102 @@
 <html>
+
+
+  <template>
+    <div>
+      <van-button @click="btn" size="mini">显示弹出层</van-button>
+      <van-popup
+        round
+        v-model:show="show"
+        position="bottom"
+        :style="{ height: '50%'}"
+        >
+          <van-picker
+          show-toolbar
+          :columns="columns"
+          value-key="name"
+          item-height="56px"
+          @confirm="onConfirm"
+          @cancel="show = false"
+          >
+            <template #option="option">
+            <div style="width: 100%;margin:0 auto;">
+              <van-checkbox-group v-model="groupChecked" style="display: inline-block;">
+                <van-checkbox :name="option.city" shape="square">{{option.city}}</van-checkbox>
+              </van-checkbox-group>	
+            </div>
+            </template>
+          </van-picker>
+      </van-popup>
+    </div>
+  </template>
+  
+  <script>
+    import Toast from 'vant/lib/toast';
+    export default{
+      data(){
+        return {
+          value: '',
+          groupChecked:[],
+          show:false,
+          columns: [{
+            city:'临汾',
+            status:1
+          },{
+            city:'运城',
+            status:2
+          },{
+            city:'长治',
+            status:3
+          },{
+            city:'晋城',
+            status:4
+          },{
+            city:'吕梁',
+            status:5
+          },{
+            city:'晋中',
+            status:6
+          },{
+            city:'忻州',
+            status:7
+          },{
+            city:'大同',
+            status:8
+          },{
+            city:'朔州',
+            status:9
+          },{
+            city:'阳泉',
+            status:10
+          },{
+            city:'太原',
+            status:11
+          }],
+        }
+      },
+      methods:{
+        btn(){
+          this.show = true
+        },
+        onConfirm(value) {
+          this.show = false
+          this.$message.success('我选中的是:' + this.groupChecked);
+        },
+      },
+      created() {
+        
+      }
+    }
+  </script>
+  
+  <style scoped="">
+    ul>li{
+      line-height: 40px;
+    }
+  </style>
+  
+  
+
   <head style="background: lightseagreen">
     中等难度的题目
   </head>
@@ -7,6 +105,7 @@
     <button id="debounce" onClick="runProgram(6)">18 四数和</button>
     <button id="debounce" onClick="runProgram(7)">23 合并升序链表</button>
     <button id="debounce" onClick="runProgram(5)">33 搜索旋转排序数组</button>
+    <button id="debounce" onClick="runProgram(8)">34 排序数组中查找位置</button>
     <button id="debounce" onClick="runProgram(2)">45 最小跳跃</button>
     <button id="debounce" onClick="runProgram(3)">55 跳跃游戏</button>
     <button id="debounce" onClick="runProgram(4)">122 股票2</button>
@@ -36,6 +135,15 @@
         const res1 = f23(lists);
         console.log(res1);
       }
+      if (val === 8) {
+        let nums = [5,7,7,8,8,10],
+          target = 0;
+        const res1 = f34(nums, target);
+        console.log(res1);
+      }
+    }
+    function f34(nums,target){
+
     }
     function telephone(digits) {
       let phone = {
