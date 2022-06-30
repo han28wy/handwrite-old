@@ -14,6 +14,8 @@
   <button id="debounce" onClick="runProgram(3)">55 跳跃游戏</button>
   <button id="debounce" onClick="runProgram(4)">122 股票2</button>
   <button id="debounce" onClick="runProgram(9)">128 最长连续序列</button>
+  <button id="debounce" onClick="runProgram(10)">136 只出现一次的数字</button>
+  <button id="debounce" onClick="runProgram(11)">139 单词拆分</button>
 </body>
 <script>
   function runProgram(val) {
@@ -47,27 +49,79 @@
       console.log(res1);
     }
     if (val === 9) {
-      let nums = [9,1,4,7,3,-1,0,5,8,-1,6]
+      let nums = [9, 1, 4, 7, 3, -1, 0, 5, 8, -1, 6]
       const res1 = f128(nums);
+      console.log(res1);
+    }
+    if (val === 10) {
+      let nums = [4, 2, 2, 1, 1]
+      const res1 = f136(nums);
+      console.log(res1);
+    }
+    if (val === 11) {
+      let s = "leetcode",
+        wordDict = ["leet", "code"]
+      const res1 = f139(s, wordDict);
       console.log(res1);
     }
   }
 
-  function f128(nums) {
-    if(nums.length === 0) return 0;
-    let res = 1
-    var numMap = new Set(nums)
-    let tempRes = 1
-    for (let [key,a] of numMap.entries()) {
-      // debugger;
-      if (numMap.has(a - 1)) {
-        tempRes = tempRes + 1
+  function f139(s, wordDict) {
+    while (s.length > 0) {
+      wordDict.forEach(item => {
+        if (s.indexOf(item) > 0) {
+          s.replace(item, '')
+        }
+      })
+    }
+  }
+
+  // 1 1 2 2 3 4 4
+  // function f136(nums) {
+  //   if(nums.length === 1) return nums[0]
+  //   nums.sort((a, b) => a - b)
+  //   let mid = Math.ceil(nums.length / 2)
+  //   for (let i = 0; i <= mid; i++) {
+  //     console.log(nums[2 * i],'    ',nums[[2 * i + 1]])
+  //     if (2*i+1-nums.length >= 0) {
+  //       return nums[2 * i]
+  //     } else if (nums[2 * i] !== nums[2 * i + 1]) {
+  //       return nums[2 * i]
+  //     }
+  //   }
+  // }
+  function f136(nums) {
+    if (nums.length === 1) return nums[0]
+    nums.sort((a, b) => a - b)
+    for (let i = 0; i < nums.length; i + 2) {
+      if (nums[i] == nums[i + 1]) {
+        continue
       } else {
-        tempRes = 1
-        res = Math.max(res, tempRes)
+        return nums[i]
+      }
+      return nums[nums.length - 1]
+    }
+  }
+
+  function f128(nums) {
+    if (nums.length === 0) return 0;
+    nums.sort((a, b) => a - b)
+    let numsMap = new Set(nums)
+    let numsList = [...numsMap]
+    console.log(numsList)
+    let res = 1
+    let temp = 1
+
+    for (let i = 0; i < numsList.length; i++) {
+      if (numsList[i] + 1 !== numsList[i + 1]) {
+        res = Math.max(res, temp)
+        temp = 1
+        continue
+      } else {
+        temp++;
       }
     }
-    return Math.max(res, tempRes)
+    return Math.max(res, temp)
   }
 
   function f34(nums, target) {
