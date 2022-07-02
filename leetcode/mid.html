@@ -12,10 +12,12 @@
   <button id="debounce" onClick="runProgram(8)">34 排序数组中查找位置</button>
   <button id="debounce" onClick="runProgram(2)">45 最小跳跃</button>
   <button id="debounce" onClick="runProgram(3)">55 跳跃游戏</button>
+  <button id="debounce" onClick="runProgram(13)">78 子集-回溯算法</button>
   <button id="debounce" onClick="runProgram(4)">122 股票2</button>
   <button id="debounce" onClick="runProgram(9)">128 最长连续序列</button>
   <button id="debounce" onClick="runProgram(10)">136 只出现一次的数字</button>
-  <button id="debounce" onClick="runProgram(11)">139 单词拆分</button>
+  <button id="debounce" onClick="runProgram(11)">139 单词拆分-动态规划</button>
+  <button id="debounce" onClick="runProgram(12)">200 岛屿数量</button>
 </body>
 <script>
   function runProgram(val) {
@@ -64,16 +66,147 @@
       const res1 = f139(s, wordDict);
       console.log(res1);
     }
+    if (val === 12) {
+      let grid = [
+        ["1", "1", "1"],
+        ["0", "1", "0"],
+        ["1", "1", "1"]
+      ]
+      const res1 = f200(grid);
+      console.log(res1);
+    }
+    if (val === 13) {
+      let grid = [1, 2, 3, 4]
+      const res1 = f78(grid);
+      console.log(res1);
+    }
+  }
+
+  function f78(nums) {
+    let result = []
+    let path = []
+    function backtracking(startIndex) {
+        result.push(path.slice())
+        for(let i = startIndex; i < nums.length; i++) {
+            path.push(nums[i])
+            backtracking(i + 1)
+            path.pop()
+        }
+    }
+    backtracking(0)
+    return result
+};
+
+  // function f78(nums) {
+  //   if (nums.length === 0) return []
+  //   let dp = new Array(nums.length).fill([])
+  //   dp[0] = []
+  //   for (let i = 1; i < nums.length; i++) {
+  //     let temp = dp[i - 1].concat()
+  //     let result = []
+  //     for (let j = 0; j < nums.length; j++) {
+  //       let arr = temp[j].concat()
+  //       result.push(temp[j])
+  //       arr.push(nums[i])
+  //       result.push(arr)
+  //     }
+  //     dp[i] = result.concat()
+  //   }
+  //   return dp[num.length - 1]
+  // }
+  // 网格DFS遍历
+  // 遍历整个矩阵，当curr = 1时开始做深度有限搜索dfs 岛屿数量count+1,并且删除此岛屿
+  function dfs(i, j, grid) {
+    if (i < 0 || j < 0 || i >= grid.length || j >= grid[0].length || grid[i][j] === '0') {
+      console.log(i, '     ', j)
+      return
+    }
+    grid[i][j] = '0'
+    dfs(i + 1, j, grid)
+    dfs(i, j + 1, grid)
+    dfs(i - 1, j, grid)
+    dfs(i, j - 1, grid)
+  }
+
+  function f200(grid) {
+    let count = 0
+    for (let i = 0; i < grid.length; i++) {
+      for (j = 0; j < grid[0].length; j++) {
+        if (grid[i][j] === '1') {
+          dfs(i, j, grid)
+          count++
+        }
+      }
+    }
+    return count
+  }
+
+  function f200_fail(grid) {
+    let m = grid.length
+    let n = grid[0].length
+    let res = grid[0][0] == '1' ? 1 : 0
+    if (m === 1 && n === 1) return grid[0][0]
+    if (m === 1) {
+      for (let i = 1; i < n; i++) {
+        let left = i === 0 ? 0 : grid[0][i - 1]
+        if (grid[0][i] == 1) {
+          if (left == 0) {
+            res++
+          }
+        }
+      }
+      return res
+    }
+    if (n === 1) {
+      for (let j = 1; j < m; j++) {
+        let top = j === 0 ? j : grid[j - 1][0]
+        if (grid[j][0] == 1) {
+          if (top == 0) {
+            res++
+          }
+        }
+      }
+      return res
+    }
+    for (let i = 0; i < m; i++) {
+      for (let j = 0; j < n; j++) {
+        let cur = grid[i][j]
+        let left = j === 0 ? 0 : grid[i][j - 1]
+        let top = i === 0 ? 0 : grid[i - 1][j]
+        if (cur == 1) {
+          if (left == 0 && top == 0 && i > 0 && j > 0) {
+            console.log(' aaa ', i, '    ', j)
+            res++
+          } else if (i === 0 && left == 0) {
+            console.log(' vvv ', i, '    ', j)
+            res++
+          } else if (j === 0 && top == 0) {
+            console.log(' sss ', i, '    ', j)
+            res++
+          }
+        }
+      }
+    }
+    return res
   }
 
   function f139(s, wordDict) {
-    while (s.length > 0) {
-      wordDict.forEach(item => {
-        if (s.indexOf(item) > 0) {
-          s.replace(item, '')
-        }
-      })
+    const len = s.length;
+    const wordSet = new Set(wordDict);
+    const canBreak = (start) => { // 判断从start到末尾的子串能否break
+      console.log('ssss     ', start)
+      if (start == len) { //指针越界，s一步步成功划分为单词，才走到越界这步，现在没有剩余子串
+        return true; //返回真，结束递归
+      }
+      for (let i = start + 1; i <= len; i++) { //指针i去划分两部分，for枚举出当前所有的选项i
+        const prefix = s.slice(start, i); // 切出的前缀部分
+        if (wordSet.has(prefix) && canBreak(i)) { // 前缀部分是单词，且剩余子串能break，返回真
+          return true;
+        } // 如果前缀部分不是单词，就不会执行canBreak(i)。进入下一轮迭代，再切出一个前缀串，再试
+      }
+      return false; // 指针i怎么划分，都没有返回true，则返回false
     }
+    return canBreak(0); // 递归的入口，从0到末尾的子串能否break
   }
 
   // 1 1 2 2 3 4 4
