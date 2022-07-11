@@ -90,12 +90,21 @@
         if(dom){
             queue.push(dom)
             while(queue.length){
+              console.log(8888)
+              console.log(queue)
                 const item = queue.shift() // 取出这个列表的第一个节点
+                console.log('水电费     ',item)
                 nodeList.push(item.name)
-                ite
+                for(let i of item.children){
+                  queue.push(i)
+                }
+              
             }
         }
+        return nodeList
     }
+    const dfsRes = DFSAlgorithm(data[0])
+    console.log('7777    ',dfsRes)
 
     function test(data){
         data.forEach(item=>{
