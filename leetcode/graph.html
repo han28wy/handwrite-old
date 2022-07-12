@@ -1,7 +1,7 @@
 <html>
   <head style="background: lightseagreen">
-    <button id="debounce" onClick="runProgram(1)">733 </button>
-    <button id="debounce" onClick="runProgram(2)">200 </button>
+    <button id="debounce" onClick="runProgram(1)">733</button>
+    <button id="debounce" onClick="runProgram(2)">200</button>
     <button id="debounce" onClick="runProgram(3)">695</button>
     <button id="debounce" onClick="runProgram(4)">1254</button>
     <button id="debounce" onClick="runProgram(5)">1020</button>
@@ -11,8 +11,8 @@
     <button id="debounce" onClick="runProgram(9)">1091</button>
     <button id="debounce" onClick="runProgram(10)">542</button>
 
-    <button id="debounce" onClick="runProgram(11)">934 </button>
-    <button id="debounce" onClick="runProgram(12)">1926 </button>
+    <button id="debounce" onClick="runProgram(11)">934</button>
+    <button id="debounce" onClick="runProgram(12)">1926</button>
     <button id="debounce" onClick="runProgram(13)">797</button>
     <button id="debounce" onClick="runProgram(14)">841</button>
     <button id="debounce" onClick="runProgram(15)">1319</button>
@@ -22,19 +22,36 @@
     <button id="debounce" onClick="runProgram(19)">1466</button>
     <button id="debounce" onClick="runProgram(20)">847</button>
 
-    <button id="debounce" onClick="runProgram(21)"> 1306</button>
-    <button id="debounce" onClick="runProgram(22)">752 </button>
-    <button id="debounce" onClick="runProgram(23)">127 </button>
+    <button id="debounce" onClick="runProgram(21)">1306</button>
+    <button id="debounce" onClick="runProgram(22)">752</button>
+    <button id="debounce" onClick="runProgram(23)">127</button>
     <button id="debounce" onClick="runProgram(24)">997</button>
     <button id="debounce" onClick="runProgram(25)">1557</button>
     <button id="debounce" onClick="runProgram(26)">1615</button>
     <button id="debounce" onClick="runProgram(27)">886</button>
     <button id="debounce" onClick="runProgram(28)">785</button>
-
   </head>
 
   <body></body>
+  <script src="./graph/index.js"></script>
   <script>
-  
+    function runProgram(val) {
+      if (val === 1) {
+        let arr = "23";
+        const res1 = telephone(arr);
+        console.log(res1);
+      }
+      if (val === 2) {
+        let arr = "23";
+        const res1 = f200(arr);
+        console.log(res1);
+      }
+    }
+
+    function f200() {
+      console.log("20000");
+    }
+
+    function f695() {}
   </script>
 </html>
