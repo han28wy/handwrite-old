@@ -1,46 +1,12 @@
 <html>
   <head style="background: lightseagreen">
-    <button id="debounce" onClick="runProgram(1)">733</button>
-    <button id="debounce" onClick="runProgram(2)">200 岛屿数</button>
-    <button id="debounce" onClick="runProgram(3)">695 岛屿最大面积</button>
-    <button id="debounce" onClick="runProgram(4)">1254</button>
-    <button id="debounce" onClick="runProgram(5)">1020</button>
-    <button id="debounce" onClick="runProgram(6)">1905</button>
-    <button id="debounce" onClick="runProgram(7)">1162</button>
-    <button id="debounce" onClick="runProgram(8)">417</button>
-    <button id="debounce" onClick="runProgram(9)">1091</button>
-    <button id="debounce" onClick="runProgram(10)">542</button>
-
-    <button id="debounce" onClick="runProgram(11)">934</button>
-    <button id="debounce" onClick="runProgram(12)">1926</button>
-    <button id="debounce" onClick="runProgram(13)">797</button>
-    <button id="debounce" onClick="runProgram(14)">841</button>
-    <button id="debounce" onClick="runProgram(15)">1319</button>
-    <button id="debounce" onClick="runProgram(16)">1378</button>
-    <button id="debounce" onClick="runProgram(17)">802</button>
-    <button id="debounce" onClick="runProgram(18)">1129</button>
-    <button id="debounce" onClick="runProgram(19)">1466</button>
-    <button id="debounce" onClick="runProgram(20)">847</button>
-
-    <!-- <button id="debounce" onClick="runProgram(21)">1306</button>
-    <button id="debounce" onClick="runProgram(22)">752</button>
-    <button id="debounce" onClick="runProgram(23)">127</button>
-    <button id="debounce" onClick="runProgram(24)">997</button>
-    <button id="debounce" onClick="runProgram(25)">1557</button>
-    <button id="debounce" onClick="runProgram(26)">1615</button>
-    <button id="debounce" onClick="runProgram(27)">886</button>
-    <button id="debounce" onClick="runProgram(28)">785</button> -->
+    <button id="debounce" onClick="runProgram(1)">695 岛屿最大面积</button>
   </head>
 
   <body></body>
   <script>
     function runProgram(val) {
       if (val === 1) {
-        let arr = "23";
-        const res1 = telephone(arr);
-        console.log(res1);
-      }
-      if (val === 2) {
         let grid = [
           ["1", "1", "1", "1", "0"],
           ["1", "1", "0", "1", "0"],
@@ -102,9 +68,10 @@
     }
 
     // 题目f200  用深度优先解决 DFS
-    function turnZero_dfs(grid, x, y) {
+    function turnZero_dfs(grid, x, y, currSquare) {
       if( x < 0 ||x >= grid.length || y < 0 || y >= grid[0].length || grid[x][y] == '0') return
       grid[x][y] = '0'
+      ++currSquare
       turnZero_dfs(grid, x-1, y)
       turnZero_dfs(grid, x+1, y)
       turnZero_dfs(grid, x, y-1)
@@ -118,12 +85,14 @@
       let nr = grid.length;
       let nc = grid[0].length;
       let count = 0;
+      let currSquare = 0;  // 当前岛屿面积
+      let res = 0
 
       for (let i = 0; i < nr; ++i) {
         for (let j = 0; j < nc; ++j) {
           if (grid[i][j] === "1") {
             ++count;
-            turnZero_dfs(grid, i, j);
+            turnZero_dfs(grid, i, j, currSquare);
           }
         }
       }
