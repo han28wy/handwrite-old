@@ -1,12 +1,12 @@
 <html>
   <head style="background: lightseagreen">
-    <button id="debounce" onClick="runProgram(1)">695 岛屿最大面积</button>
+    <button id="debounce" onClick="runProgram(2)">200 岛屿数</button>
   </head>
 
   <body></body>
   <script>
     function runProgram(val) {
-      if (val === 1) {
+      if (val === 2) {
         let grid = [
           ["1", "1", "1", "1", "0"],
           ["1", "1", "0", "1", "0"],
@@ -37,7 +37,7 @@
             x >= grid.length ||
             y < 0 ||
             y >= grid[0].length ||
-            grid[x][y] == '0'
+            grid[x][y] == "0"
           ) {
             continue;
           }
@@ -56,7 +56,7 @@
       let queue = [];
       for (let i = 0; i < nr; ++i) {
         for (let j = 0; j < nc; ++j) {
-          if (grid[i][j] == '1') {
+          if (grid[i][j] == "1") {
             ++count;
             grid[i][j] = "0";
             queue.push([i, j]);
@@ -68,14 +68,20 @@
     }
 
     // 题目f200  用深度优先解决 DFS
-    function turnZero_dfs(grid, x, y, currSquare) {
-      if( x < 0 ||x >= grid.length || y < 0 || y >= grid[0].length || grid[x][y] == '0') return
-      grid[x][y] = '0'
-      ++currSquare
-      turnZero_dfs(grid, x-1, y)
-      turnZero_dfs(grid, x+1, y)
-      turnZero_dfs(grid, x, y-1)
-      turnZero_dfs(grid, x, y+1)
+    function turnZero_dfs(grid, x, y) {
+      if (
+        x < 0 ||
+        x >= grid.length ||
+        y < 0 ||
+        y >= grid[0].length ||
+        grid[x][y] == "0"
+      )
+        return;
+      grid[x][y] = "0";
+      turnZero_dfs(grid, x - 1, y);
+      turnZero_dfs(grid, x + 1, y);
+      turnZero_dfs(grid, x, y - 1);
+      turnZero_dfs(grid, x, y + 1);
     }
 
     function f200_dfs(grid) {
@@ -85,20 +91,17 @@
       let nr = grid.length;
       let nc = grid[0].length;
       let count = 0;
-      let currSquare = 0;  // 当前岛屿面积
-      let res = 0
 
       for (let i = 0; i < nr; ++i) {
         for (let j = 0; j < nc; ++j) {
           if (grid[i][j] === "1") {
             ++count;
-            turnZero_dfs(grid, i, j, currSquare);
+            turnZero_dfs(grid, i, j);
           }
         }
       }
       return count;
     }
 
-    function f695() {}
   </script>
 </html>
